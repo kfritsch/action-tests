@@ -18,7 +18,7 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(TZ="CET" date '+%A_%b-%d-%Y_%H-%M')"
       - name: tag latest commit if not tagged
-        if: { { $steps.tag-missing.outputs.tag-missing } }
+        if: ${{ steps.tag-missing.outputs.tag-missing }}
         uses: actions/github-script@v4
         with:
           script: |
