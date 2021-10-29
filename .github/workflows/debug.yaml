@@ -13,8 +13,10 @@ jobs:
     steps:
       - uses: hmarr/debug-action@v2
       - name: x
-        run: echo tag
+        id: a
+        run: echo "::set-output name=branch::master"
         if: contains(github.event.ref, 'tags')
       - name: y
-        run: echo push
+        id: a
+        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
         if: contains(github.event.ref, 'heads')
