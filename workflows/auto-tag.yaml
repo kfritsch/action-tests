@@ -17,7 +17,7 @@ jobs:
         run: echo "::set-output name=date::$(date '+%A_%b-%d-%Y_%H:%M')"
       - name: tag latest commit if not tagged
         if: ${{steps.tag-missing.outputs.tag-missing}}
-        uses: actions/github-script@v5
+        uses: actions/github-script@v4
         with:
           script: |
             github.git.createRef({
