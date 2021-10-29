@@ -10,9 +10,9 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v2
       - name: log
-        run: echo "$(git tag --points-at HEAD)"
+        run: git tag --points-at HEAD
       - name: log
-        run: echo "$(! git tag --points-at HEAD)"
+        run: echo "$(git tag --points-at HEAD)"
       - name: check if latest commit has tag
         id: tag-missing
         run: echo "::set-output name=tag-missing::$(! git tag --points-at HEAD)"
