@@ -13,10 +13,12 @@ jobs:
         id: tag-missing
         run: if [[ ! $(git tag --points-at HEAD) ]]; then echo "::set-output name=tag-missing::true"; fi;
       - name: Get current date
+        run: echo "$steps.tag-missing.outputs.tag-missing"
+      - name: Get current date
         id: date
         run: echo "::set-output name=date::$(TZ="CET" date '+%A_%b-%d-%Y_%H-%M')"
       - name: tag latest commit if not tagged
-        if: ! $(git tag --points-at HEAD)
+        if: { { $steps.tag-missing.outputs.tag-missing } }
         uses: actions/github-script@v4
         with:
           script: |
