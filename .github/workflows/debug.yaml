@@ -7,6 +7,9 @@ on:
     tags:
       - manual-deploy**
 
+env:
+  BRANCH: "init"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,9 +17,10 @@ jobs:
       - uses: hmarr/debug-action@v2
       - name: x
         id: a
-        run: echo "::set-output name=branch::master"
+        run: echo "$BRANCH=master"
         if: contains(github.event.ref, 'tags')
       - name: y
         id: a
-        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+        run: echo "$BRANCH=${GITHUB_REF#refs/heads/}"
         if: contains(github.event.ref, 'heads')
+      - run: echo " branch $BRANCH"
