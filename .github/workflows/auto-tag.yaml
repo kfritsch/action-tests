@@ -7,8 +7,9 @@ jobs:
   auto-tag:
     runs-on: ubuntu-latest
     steps:
-      - name: check if latest commit has tag
+      - name: checkout repo
         uses: actions/checkout@v2
+      - name: check if latest commit has tag
         id: tag-missing
         run: echo "::set-output name=tag-missing::$(! git tag --points-at HEAD)"
       - name: Get current date
