@@ -16,9 +16,9 @@ jobs:
     steps:
       - uses: hmarr/debug-action@v2
       - name: x
-        run: echo "::set-output name=BRANCH::master"
-        if: contains(github.event.ref, 'tags')
+        id: date
+        run: if [ ${{contains(github.event.ref, 'tags')}} ]; then echo "::set-output name=date::true";
       - name: y
         run: echo "::set-env name=BRANCH::${GITHUB_REF#refs/heads/}"
         if: contains(github.event.ref, 'heads')
-      - run: echo "branch $BRANCH"
+      - run: echo "branch ${{steps.date.outputs.date}}"
