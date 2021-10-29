@@ -21,4 +21,4 @@ jobs:
       - name: y
         run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
         if: contains(github.event.ref, 'heads')
-      - run: echo "Deploying to production server on branch ${env.branch}"
+      - run: echo "branch ${{ env.branch }}"
