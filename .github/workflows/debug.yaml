@@ -1,0 +1,14 @@
+name: Debug
+
+on: 
+  push:
+    branches:
+      - main
+    tags:
+      - manual-deploy**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: hmarr/debug-action@v2
