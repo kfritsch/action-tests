@@ -2,8 +2,8 @@ name: Auto Tag Repo
 
 on:
   schedule:
-    - cron: '47 0-4,14-23 * * 1-5' # those times are UTC -> CET '* 0-6,16-23 * * 1-5' weekdays at the full hour from 4pm to 6am
-    - cron: '47 * * * 0,6' # weekends always at the full hour
+    - cron: '50 0-4,14-23 * * 1-5' # those times are UTC -> CET '* 0-6,16-23 * * 1-5' weekdays at the full hour from 4pm to 6am
+    - cron: '50 * * * 0,6' # weekends always at the full hour
 
 jobs:
   auto-tag:
