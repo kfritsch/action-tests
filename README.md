@@ -1,1 +1,3 @@
 # action-tests
+
+trigger
