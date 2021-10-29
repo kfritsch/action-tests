@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
       - name: check if latest commit has tag
         id: tag-missing
-        run: if [[ ! $(git tag --points-at HEAD) ]]; then echo "::set-output name=tag-missing::true; fi;"
+        run: if [[ ! $(git tag --points-at HEAD) ]]; then echo "::set-output name=tag-missing::true; fi;
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(TZ="CET" date '+%A_%b-%d-%Y_%H-%M')"
