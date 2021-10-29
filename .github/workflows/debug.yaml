@@ -16,9 +16,9 @@ jobs:
     steps:
       - uses: hmarr/debug-action@v2
       - name: x
-        run: echo "$BRANCH=master"
+        run: $BRANCH=master
         if: contains(github.event.ref, 'tags')
       - name: y
-        run: echo "$BRANCH=${GITHUB_REF#refs/heads/}"
+        run: $BRANCH=${GITHUB_REF#refs/heads/}
         if: contains(github.event.ref, 'heads')
-      - run: echo " branch $BRANCH"
+      - run: echo "branch $BRANCH"
