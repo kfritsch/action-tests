@@ -16,9 +16,9 @@ jobs:
     steps:
       - uses: hmarr/debug-action@v2
       - name: x
-        id: date
-        run: if [ ${contains(github.event.ref, 'tags')} ]; then echo "::set-output name=date::true"; fi;
+        run: echo "branch=master" >> $GITHUB_ENV
+        if: contains(github.event.ref, 'tags')
       - name: y
-        run: echo "::set-env name=BRANCH::${GITHUB_REF#refs/heads/}"
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
         if: contains(github.event.ref, 'heads')
-      - run: echo "branch ${steps.date.outputs.date}"
+      - run: echo "Deploying to production server on branch ${env.branch}"
