@@ -13,6 +13,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ env.branch }}
     steps:
       - uses: hmarr/debug-action@v2
       - name: x
@@ -22,3 +24,9 @@ jobs:
         run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
         if: contains(github.event.ref, 'heads')
       - run: echo "branch ${{ env.branch }}"
+  build-push-app:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Build and push
+        run: echo "output ${{ needs.build.outputs.branch }}""
