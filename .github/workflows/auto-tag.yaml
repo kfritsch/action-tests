@@ -16,7 +16,7 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(TZ="CET" date '+%A_%b-%d-%Y_%H-%M')"
       - name: tag latest commit if not tagged
-        if: ${{! git tag --points-at HEAD}}
+        if: [[! $(git tag --points-at HEAD)]]
         uses: actions/github-script@v4
         with:
           script: |
