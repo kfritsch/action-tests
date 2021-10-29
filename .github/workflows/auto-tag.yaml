@@ -2,7 +2,7 @@ name: Auto Tag Repo
 
 on:
   schedule:
-    - cron: "9,10,11 * * * 1-5"
+    - cron: "9,10,11,12,13 * * * 1-5"
 
 jobs:
   auto-tag:
