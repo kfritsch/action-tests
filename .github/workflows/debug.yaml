@@ -8,7 +8,7 @@ on:
       - manual-deploy**
 
 env:
-  BRANCH: "init"
+  BRANCH: init
 
 jobs:
   build:
@@ -16,9 +16,9 @@ jobs:
     steps:
       - uses: hmarr/debug-action@v2
       - name: x
-        run: $BRANCH=master
+        run: echo "::set-output name=BRANCH::master"
         if: contains(github.event.ref, 'tags')
       - name: y
-        run: $BRANCH=${GITHUB_REF#refs/heads/}
+        run: echo "::set-env name=BRANCH::${GITHUB_REF#refs/heads/}"
         if: contains(github.event.ref, 'heads')
       - run: echo "branch $BRANCH"
