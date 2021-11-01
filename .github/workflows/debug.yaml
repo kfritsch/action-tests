@@ -23,6 +23,8 @@ jobs:
       - name: y
         run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
         if: contains(github.event.ref, 'heads')
+      - run: echo "branch ${GITHUB_SHA}"
+      - run: echo "branch ${GITHUB_REF}"
       - run: echo "branch ${{ env.branch }}"
   build-push-app:
     runs-on: ubuntu-latest
