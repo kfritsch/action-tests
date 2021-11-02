@@ -1,3 +1,3 @@
 # action-tests
 
-trigger
+trigger added
