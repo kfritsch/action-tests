@@ -12,7 +12,7 @@ on:
     - cron: "45-48 * * * 0,6" # weekends always at the full hour
 
 jobs:
-  image-tag:
+  register-tag:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ env.branch }}-${{ steps.shorten-sha.outputs.sha }}
@@ -42,6 +42,6 @@ jobs:
     needs: register-tag
     steps:
       - name: read tag
-        run: echo "${{ needs.image-tag.outputs.tag }}"
+        run: echo "${{ needs.register-tag.outputs.tag }}"
       - name: read tag-missing
-        run: echo "${{ needs.image-tag.outputs.tag-missing }}"
+        run: echo "${{ needs.register-tag.outputs.tag-missing }}"
