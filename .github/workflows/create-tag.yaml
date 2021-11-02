@@ -30,7 +30,7 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            github.git.createTag({
+            const createdTag = await github.git.createTag({
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag: "auto-deploy_${{steps.date.outputs.date}}",
@@ -38,3 +38,11 @@ jobs:
               object: context.sha,
               type: "commit"
             })
+            if (createdTag.status === 201) {
+              github.git.createRef({
+                  owner: repoOwner,
+                  repo: repoName,
+                  ref: "refs/tags/auto-deploy_${{steps.date.outputs.date}}",
+                  sha: context.sha
+              })
+            }
