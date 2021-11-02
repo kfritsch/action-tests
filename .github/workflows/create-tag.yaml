@@ -30,9 +30,11 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            github.git.createRef({
+            github.git.createTag({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/auto-deploy_${{steps.date.outputs.date}}",
-              sha: context.sha
+              tag: "auto-deploy_${{steps.date.outputs.date}}",
+              message: tagMessage,
+              object: context.sha,
+              type: "commit"
             })
