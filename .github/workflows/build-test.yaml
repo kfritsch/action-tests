@@ -29,10 +29,10 @@ jobs:
         if: contains(github.event.ref, 'tags')
         run: echo "branch=master" >> $GITHUB_ENV
       - name: if it is a cron job check checkout the current HEAD
-        if: ${{ GITHUB_EVENT_NAME == 'schedule' }}
+        if: ${{ github.event_name == 'schedule' }}
         uses: actions/checkout@v2
       - name: check if the HEAD is not tagged
-        if: ${{ GITHUB_EVENT_NAME == 'schedule' }}
+        if: ${{ github.event_name == 'schedule' }}
         id: tag-missing
         run: git fetch origin 'refs/tags/*:refs/tags/*'; if [[ ! $(git tag --points-at HEAD) ]]; then echo "::set-output name=tag-missing::true"; fi;
       - name: if the HEAD is not tagged then tag it
