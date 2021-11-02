@@ -34,7 +34,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag: "auto-deploy_${{steps.date.outputs.date}}",
-              message: tagMessage,
+              message: "This tag was triggered automatically",
               object: context.sha,
               type: "commit"
             })
