@@ -40,9 +40,9 @@ jobs:
             })
             if (createdTag.status === 201) {
               github.git.createRef({
-                  owner: repoOwner,
-                  repo: repoName,
-                  ref: "refs/tags/auto-deploy_${{steps.date.outputs.date}}",
-                  sha: context.sha
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "refs/tags/auto-deploy_${{steps.date.outputs.date}}",
+                sha: context.sha
               })
             }
