@@ -1,7 +1,7 @@
 name: Test On Tag
 
 on:
-  push:
+  create:
     tags:
       - auto-deploy**
       - manual-deploy**
@@ -12,6 +12,7 @@ jobs:
     outputs:
       tag: ${{ env.branch }}-${{ steps.shorten-sha.outputs.sha }}
     steps:
+      - uses: hmarr/debug-action@v2
       - name: on valid tag pushes select master as deploy branch
         if: contains(github.event.ref, 'tags')
         run: echo "branch=master" >> $GITHUB_ENV
