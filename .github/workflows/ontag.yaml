@@ -5,6 +5,10 @@ on:
     tags:
       - auto-deploy**
       - manual-deploy**
+  push:
+    tags:
+      - auto-deploy**
+      - manual-deploy**
 
 jobs:
   register-tag:
