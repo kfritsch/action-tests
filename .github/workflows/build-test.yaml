@@ -8,8 +8,8 @@ on:
     tags:
       - deploy-master**
   schedule:
-    - cron: "35-50 0-4,14-23 * * 1-5" # those times are UTC -> CET '* 0-6,16-23 * * 1-5' weekdays at the full hour from 4pm to 6am
-    - cron: "35-50 * * * 0,6" # weekends always at the full hour
+    - cron: "*/5 0-4,14-23 * * 1-5" # those times are UTC -> CET '* 0-6,16-23 * * 1-5' weekdays at the full hour from 4pm to 6am
+    - cron: "*/5 * * * 0,6" # weekends always at the full hour
 
 jobs:
   register-deploy:
@@ -35,6 +35,12 @@ jobs:
         if: ${{ github.event_name == 'schedule' }}
         id: tag-missing
         run: git fetch origin 'refs/tags/*:refs/tags/*'; if [[ ! $(git tag --points-at HEAD) ]]; then echo "::set-output name=tag-missing::true"; fi;
+      - name: if the HEAD is not tagged then set branch to deploy
+        if: ${{ steps.tag-missing.outputs.tag-missing == 'true' }}
+        run: echo "branch=master" >> $GITHUB_ENV
+      - name: if the HEAD is not tagged then generate a tag date
+        id: date
+        run: echo "::set-output name=date::$(TZ="CET" date '+%Y-%m-%d_%H-%M')"
       - name: if the HEAD is not tagged then tag it
         if: ${{ steps.tag-missing.outputs.tag-missing == 'true' }}
         uses: actions/github-script@v4
@@ -43,12 +49,9 @@ jobs:
             github.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/auto-deploy_$(TZ="CET" date '+%Y-%m-%d_%H-%M')",
+              ref: "refs/tags/auto-deploy_${{steps.date.outputs.date}}",
               sha: context.sha
             })
-      - name: if the HEAD is not tagged then set branch to deploy
-        if: ${{ steps.tag-missing.outputs.tag-missing == 'true' }}
-        run: echo "branch=master" >> $GITHUB_ENV
       - name: Split off first 7 characters of sha
         id: shorten-sha
         run: echo "::set-output name=sha::${GITHUB_SHA:0:7}"
