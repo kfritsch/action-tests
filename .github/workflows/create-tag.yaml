@@ -15,7 +15,7 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v2
       - name: check if latest commit has tag
-        run: git tag --points-at HEAD
+        run: git fetch origin 'refs/tags/*:refs/tags/*'; git tag --points-at HEAD
       - name: check if latest commit has tag
         id: tag-missing
         run: if [[ ! $(git tag --points-at HEAD) ]]; then echo "::set-output name=tag-missing::true"; fi;

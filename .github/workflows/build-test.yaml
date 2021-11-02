@@ -1,0 +1,47 @@
+name: Build App Test
+
+on:
+  push:
+    branches:
+      - staging
+      - beta
+    tags:
+      - deploy-master**
+  schedule:
+    - cron: "* 0-4,14-23 * * 1-5" # those times are UTC -> CET '* 0-6,16-23 * * 1-5' weekdays at the full hour from 4pm to 6am
+    - cron: "* * * * 0,6" # weekends always at the full hour
+
+jobs:
+  image-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ env.branch }}-${{ steps.shorten-sha.outputs.sha }}
+      tag-missing: ${{ steps.tag-missing.outputs.tag-missing }}
+    steps:
+      - name: DEBUG
+        uses: hmarr/debug-action@v2
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: check if latest commit has tag
+        run: git fetch origin 'refs/tags/*:refs/tags/*'; git tag --points-at HEAD;
+      - name: check if latest commit has tag
+        id: tag-missing
+        run: if [[ ! $(git tag --points-at HEAD) ]]; then echo "::set-output name=tag-missing::true"; fi;
+      - name: on branch pushes to staging or beta extract the branch name from GITHUB_REF
+        if: contains(github.event.ref, 'heads')
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+      - name: on valid tag pushes select master as deploy branch
+        if: contains(github.event.ref, 'tags')
+        run: echo "branch=master" >> $GITHUB_ENV
+      - name: Split off first 7 characters of sha
+        id: shorten-sha
+        run: echo "::set-output name=sha::${GITHUB_SHA:0:7}"
+
+  log-tag:
+    runs-on: ubuntu-latest
+    needs: register-tag
+    steps:
+      - name: read tag
+        run: echo "${{ needs.image-tag.outputs.tag }}"
+      - name: read tag-missing
+        run: echo "${{ needs.image-tag.outputs.tag-missing }}"
