@@ -8,8 +8,8 @@ on:
     tags:
       - deploy-master**
   schedule:
-    - cron: "5-15 0-4,14-23 * * 1-5" # those times are UTC -> CET '* 0-6,16-23 * * 1-5' weekdays at the full hour from 4pm to 6am
-    - cron: "5-15 * * * 0,6" # weekends always at the full hour
+    - cron: "30-45 0-4,14-23 * * 1-5" # those times are UTC -> CET '* 0-6,16-23 * * 1-5' weekdays at the full hour from 4pm to 6am
+    - cron: "30-45 * * * 0,6" # weekends always at the full hour
 
 jobs:
   register-deploy:
