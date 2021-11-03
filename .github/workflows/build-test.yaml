@@ -64,6 +64,8 @@ jobs:
         run: echo "${{ needs.register-deploy.outputs.deploy }}"
       - name: read deploy-tag
         run: echo "${{ needs.register-deploy.outputs.deploy-tag }}"
+      - name: read deploy-tag
+        run: echo "${{ env.branch }}"
 
   conditional-job:
     runs-on: ubuntu-latest
