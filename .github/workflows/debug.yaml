@@ -1,9 +1,12 @@
 name: Debug
 
-on: 
+on:
   push:
     branches:
       - main
+    tags:
+      - manual-deploy**
+  create:
     tags:
       - manual-deploy**
 
