@@ -26,7 +26,11 @@ jobs:
             echo "::set-output name=date::$date"
           fi
       - name: create the tag depending on the check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.tag-info.outputs.create-tag == 'true' }}
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag -a -m "scheduled tag to trigger deployment" manual-deploy_${{steps.tag-info.outputs.date}}
           git push origin manual-deploy_${{steps.tag-info.outputs.date}}
