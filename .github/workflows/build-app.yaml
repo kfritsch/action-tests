@@ -1,4 +1,5 @@
-name: Build App Test
+# Testing the select-env part from pearup Build App
+name: Build App
 
 on:
   push:
@@ -9,6 +10,8 @@ on:
       - deploy-master**
 
 jobs:
+  # This job builds performs a docker build to put the application
+  # into a docker image. The image is then stored in a AWS ECR registry.
   select-env:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, ':rocket:(skip-ci):')"
@@ -16,6 +19,7 @@ jobs:
       environment: ${{ env.environment }}
       image-tag: ${{ env.image-tag }}
     steps:
+      - uses: hmarr/debug-action@v2
       - name: specify enviroment and image-tag on branch pushes to staging or beta
         if: contains(github.event.ref, 'heads')
         run: |
@@ -27,11 +31,8 @@ jobs:
           echo "image-tag=master-${GITHUB_SHA:0:7}" >> $GITHUB_ENV
           echo "environment=production" >> $GITHUB_ENV
 
-  log-env:
-    runs-on: ubuntu-latest
-    needs: select-env
-    steps:
-      - name: read environment
-        run: echo "${{ needs.select-env.outputs.environment }}"
-      - name: read image-tag
-        run: echo "${{ needs.select-env.outputs.image-tag }}"
+      # logging only
+      - name: log created envs
+        run: |
+          echo "${{ env.environment }}"
+          echo "${{ env.image-tag }}"

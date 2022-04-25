@@ -1,3 +1,6 @@
+# Testing the commit-tag part from pearup Build App
+# No actual cron used here to make testig easier
+# Trigger here is a push to main with 'tag' in the commit message
 name: Trigger Build
 
 on:
@@ -8,11 +11,11 @@ on:
 jobs:
   commit-tag:
     runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, 'tag')"
     steps:
+      - uses: hmarr/debug-action@v2
       - name: checkout the current HEAD
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.ADMIN_ACCESS_TOKEN }}
       - name: check if the HEAD should be tagged triggering a new build
         id: tag-info
         run: |
@@ -20,7 +23,8 @@ jobs:
           skip=":rocket:(skip-ci):"
           sha="$(git log --pretty=%H -1)"
           date="$(TZ="CET" date '+%Y-%m-%d_%H-%M')"
-          if [[ $message != *$skip* ]]; then
+          git fetch origin 'refs/tags/*:refs/tags/*'
+          if [[ $message != *$skip* && ! $(git tag --points-at HEAD) ]]; then
             echo "::set-output name=create-tag::true"
             echo "::set-output name=sha::$sha"
             echo "::set-output name=date::$date"
@@ -30,5 +34,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a -m "scheduled tag to trigger deployment" manual-deploy_${{steps.tag-info.outputs.date}}
-          git push origin manual-deploy_${{steps.tag-info.outputs.date}}
+          git tag -a -m "scheduled tag to trigger deployment" deploy-master_${{steps.tag-info.outputs.date}}
+          git push origin deploy-master_${{steps.tag-info.outputs.date}}
