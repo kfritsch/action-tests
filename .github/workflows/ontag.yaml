@@ -1,11 +1,6 @@
 name: Test On Tag
 
-on:
-  create
-  push:
-    tags:
-      - auto-deploy**
-      - manual-deploy**
+on: create
 
 jobs:
   register-tag:
