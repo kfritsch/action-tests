@@ -27,13 +27,6 @@ jobs:
           fi
       - name: create the tag depending on the check
         if: ${{ steps.tag-info.outputs.create-tag == 'true' }}
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: "refs/tags/manual-deploy${{steps.tag-info.outputs.date}}",
-              sha: "${{steps.tag-info.outputs.sha}}"
-            })
+        run: |
+          git tag -a -m "scheduled tag to trigger deployment" manual-deploy_${{steps.tag-info.outputs.date}}
+          git push origin manual-deploy_${{steps.tag-info.outputs.date}}
