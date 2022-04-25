@@ -2,9 +2,6 @@ name: Test On Tag
 
 on:
   create:
-    tags:
-      - auto-deploy**
-      - manual-deploy**
   push:
     tags:
       - auto-deploy**
@@ -30,4 +27,3 @@ jobs:
     steps:
       - name: read tag
         run: echo "${{ needs.image-tag.outputs.tag }}"
-        
