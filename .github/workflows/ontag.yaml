@@ -1,7 +1,7 @@
 name: Test On Tag
 
 on:
-  create:
+  create
   push:
     tags:
       - auto-deploy**
