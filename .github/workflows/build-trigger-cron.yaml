@@ -1,6 +1,7 @@
 # Testing the commit-tag part from pearup Build App
 # No actual cron used here to make testig easier
 # Trigger here is a push to main with 'tag' in the commit message
+
 name: Trigger Build
 
 on:
