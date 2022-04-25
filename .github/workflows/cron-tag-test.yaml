@@ -26,8 +26,6 @@ jobs:
             echo "::set-output name=date::$date"
           fi
       - name: create the tag depending on the check
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.tag-info.outputs.create-tag == 'true' }}
         run: |
           git config user.name "github-actions[bot]"
