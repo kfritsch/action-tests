@@ -2,7 +2,7 @@ name: Trigger Build
 
 on:
   schedule:
-    - cron: "50,55 22,23 * * *" # times are UTC -> always at midnight
+    - cron: "32,35 8,9,10 * * *" # times are UTC -> always at midnight
 
 jobs:
   commit-tag:
@@ -24,12 +24,6 @@ jobs:
           fi
       - name: create the tag depending on the check
         if: ${{ steps.tag-info.outputs.create-tag == 'true' }}
-        uses: actions/github-script@v4
-        with:
-          script: |
-            github.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: "refs/tags/tag-test_${{steps.tag-info.outputs.date}}",
-              sha: "${{steps.tag-info.outputs.sha}}"
-            })
+        run: |
+          git tag -a -m "scheduled tag to trigger deployment" manual-deploy_${{steps.tag-info.outputs.date}}
+          git push origin tag-test_${{steps.tag-info.outputs.date}}
