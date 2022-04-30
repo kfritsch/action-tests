@@ -18,6 +18,8 @@ jobs:
     outputs:
       environment: ${{ env.environment }}
       image-tag: ${{ env.image-tag }}
+      branch: ${{ env.branch }}
+
     steps:
       - uses: hmarr/debug-action@v2
       - name: specify enviroment and image-tag on branch pushes to staging or beta
@@ -25,14 +27,38 @@ jobs:
         run: |
           echo "image-tag=${GITHUB_REF#refs/heads/}-${GITHUB_SHA:0:7}" >> $GITHUB_ENV
           echo "environment=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
       - name: specify enviroment and image-tag on valid tag pushes
         if: contains(github.event.ref, 'tags')
         run: |
           echo "image-tag=master-${GITHUB_SHA:0:7}" >> $GITHUB_ENV
           echo "environment=production" >> $GITHUB_ENV
+          echo "branch=main" >> $GITHUB_ENV
 
       # logging only
       - name: log created envs
         run: |
           echo "${{ env.environment }}"
           echo "${{ env.image-tag }}"
+          echo "${{ env.branch }}"
+  try-commit:
+    needs:
+      - select-env
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull again
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.select-env.outputs.branch }}
+          token: ${{ secrets.ADMIN_ACCESS_TOKEN }}
+
+      # Replace our task definition in the repository with the updated on from the temporary location.
+      - name: Update README.md
+        run: echo 'Commit' >> README.md
+
+      # Commit the updated task definition to the repository such that we can see which version is currently deployed.
+      - name: Commit updated README.md
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: ":rocket:(skip-ci): update README.md"
